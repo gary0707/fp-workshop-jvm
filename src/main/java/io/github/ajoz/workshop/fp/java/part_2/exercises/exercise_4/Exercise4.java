@@ -2,6 +2,8 @@ package io.github.ajoz.workshop.fp.java.part_2.exercises.exercise_4;
 
 import java.util.List;
 
+import io.github.ajoz.workshop.fp.java.tools.Lists;
+
 /*
   -- Power of fold --
 
@@ -28,7 +30,7 @@ class Exercise4 {
         if (list.isEmpty())
             throw new IllegalArgumentException("list is empty");
 
-        throw new UnsupportedOperationException("Exercise 4 maximum is missing!");
+        return Lists.foldLeft(list, Integer.MIN_VALUE, Math::max);
     }
 
     /*
@@ -45,7 +47,7 @@ class Exercise4 {
         if (list.isEmpty())
             throw new IllegalArgumentException("list is empty");
 
-        throw new UnsupportedOperationException("Exercise 4 minimum is missing!");
+        return Lists.foldLeft(list, Integer.MAX_VALUE, Math::min);
     }
 
     /*
@@ -58,7 +60,7 @@ class Exercise4 {
       - do we need the element for anything?
      */
     static <A> Integer count(final List<A> list) {
-        throw new UnsupportedOperationException("Exercise 4 count is missing!");
+        return Lists.foldLeft(list, 0, (a, ignore) -> a + 1);
     }
 
     /*
@@ -120,7 +122,7 @@ class Exercise4 {
      */
     static <A> Boolean contains(final List<A> list,
                                 final A searched) {
-        throw new UnsupportedOperationException("Exercise 4 contains is missing!");
+        return Lists.foldLeft(list, false, (bool, arg) -> bool || arg.equals(searched));
     }
 
     /*
@@ -142,7 +144,7 @@ class Exercise4 {
         if (list.isEmpty())
             return "";
 
-        throw new UnsupportedOperationException("Exercise 4 join is missing!");
+        return Lists.foldLeft(Lists.tail(list), Lists.head(list).toString(), (a, b) -> a + separator + b);
     }
 
     /*

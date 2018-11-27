@@ -1,6 +1,7 @@
 package io.github.ajoz.workshop.fp.java.part_2.exercises.exercise_3;
 
 import io.github.ajoz.workshop.fp.java.tools.Function2;
+import io.github.ajoz.workshop.fp.java.tools.Lists;
 
 import java.util.List;
 
@@ -64,7 +65,12 @@ class Exercise3 {
     static <A, B> B foldRight(final List<A> list,
                               final B initial,
                               final Function2<A, B, B> operator) {
-        throw new UnsupportedOperationException("Exercise 3 foldRight is missing!");
+        B tempHolder = initial;
+        for (int index = list.size() - 1; index >= 0; index--) {
+            tempHolder = operator.apply(list.get(index), tempHolder);
+        }
+
+        return tempHolder;
     }
 
     /*
@@ -78,6 +84,6 @@ class Exercise3 {
     static <A, B> B foldRight2(final List<A> list,
                                final B initial,
                                final Function2<A, B, B> operator) {
-        throw new UnsupportedOperationException("Exercise 3 foldRight2 is missing!");
+        return foldLeft(Lists.reverse(list), initial, operator.flip());
     }
 }

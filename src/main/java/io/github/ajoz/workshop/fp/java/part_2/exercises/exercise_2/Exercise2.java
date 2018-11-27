@@ -35,7 +35,7 @@ class Exercise2 {
       Create a function `bar` that can work on a List<A> and return
       a result of type B
     */
-    /*
+
     // hint:
     // - what will be the type of initial value?
     // - what will be the types of arguments for the operator?
@@ -43,10 +43,15 @@ class Exercise2 {
     // Question:
     // - how do you think does the order of arguments in the operator
     //   has any meaning?
-    static <A, B> B bar(final List<A> list, ...) {
+    static <A, B> B bar(final List<A> list, final B initial, final Function2<A, B, B> operator) {
+        B tempHolder = initial;
+        for(final A item : list) {
+            tempHolder = operator.apply(item, tempHolder);
+        }
 
+        return tempHolder;
     }
-    */
+
 
     /*
       Part 3:
@@ -55,13 +60,12 @@ class Exercise2 {
       the newly created function `bar`
     */
 
-    /*
+
     static Integer sum(final List<Integer> list) {
-        return bar(list, ...);
+        return bar(list, 0, (a, b) -> a + b);
     }
 
     static Integer product(final List<Integer> list) {
-        return bar(list, ...);
+        return bar(list, 1, (a, b) -> a * b);
     }
-     */
 }

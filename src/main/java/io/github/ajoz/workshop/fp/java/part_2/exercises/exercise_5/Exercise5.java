@@ -2,6 +2,7 @@ package io.github.ajoz.workshop.fp.java.part_2.exercises.exercise_5;
 
 import io.github.ajoz.workshop.fp.java.tools.Function1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -42,7 +43,14 @@ public class Exercise5 {
       */
     static <A, B> List<B> map(final List<A> list,
                               final Function1<A, B> mapper) {
-        throw new UnsupportedOperationException("Exercise 5 map is missing!");
+        List<B> result = new ArrayList<>(list.size());
+        for (A item: list) {
+            B bItem = mapper.apply(item);
+            result.add(bItem);
+
+        }
+
+        return result;
     }
 
     /*
