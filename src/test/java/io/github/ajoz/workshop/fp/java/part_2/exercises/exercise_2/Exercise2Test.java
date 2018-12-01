@@ -3,19 +3,22 @@ package io.github.ajoz.workshop.fp.java.part_2.exercises.exercise_2;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 
-/*import org.junit.Test;
+import org.junit.Test;
 import java.util.Collections;
 import java.util.List;
+
+import static io.github.ajoz.workshop.fp.java.part_2.exercises.exercise_2.Exercise2.product;
+import static io.github.ajoz.workshop.fp.java.part_2.exercises.exercise_2.Exercise2.sum;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;*/
+import static org.junit.Assert.assertThat;
 
 @RunWith(Enclosed.class)
 public class Exercise2Test {
     // uncomment to test the implementation of `sum` and `product` in terms of bar
 
-    /*public static class SumTest {
+    public static class SumTest {
 
         @Test
         public void shouldReturnPositiveValueForSinglePositiveItemListSum() {
@@ -155,5 +158,5 @@ public class Exercise2Test {
             // then:
             assertThat(actual, is(expected));
         }
-    }*/
+    }
 }
