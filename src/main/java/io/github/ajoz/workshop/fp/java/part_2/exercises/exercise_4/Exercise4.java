@@ -1,8 +1,10 @@
 package io.github.ajoz.workshop.fp.java.part_2.exercises.exercise_4;
 
+import java.util.Collections;
 import java.util.List;
 
 import io.github.ajoz.workshop.fp.java.tools.Lists;
+import kotlin.Pair;
 
 /*
   -- Power of fold --
@@ -88,7 +90,7 @@ class Exercise4 {
       - what should be the initial value for fold?
      */
     static <A> List<A> reverse(final List<A> list) {
-        throw new UnsupportedOperationException("Exercise 4 reverse is missing!");
+        return Lists.foldLeft(list, Collections.emptyList(), (accumulatingList, argA) -> Lists.prepend(argA, accumulatingList));
     }
 
     /*
@@ -105,7 +107,11 @@ class Exercise4 {
         foldLeft and foldRight
      */
     static Integer average(final List<Integer> list) {
-        throw new UnsupportedOperationException("Exercise 4 average is missing!");
+        if (list.isEmpty()) return 0;
+
+        final Integer sum = Lists.foldLeft(list, 0, (acc, argInt) -> acc + argInt);
+
+        return sum / list.size();
     }
 
     /*
@@ -168,6 +174,9 @@ class Exercise4 {
         if (list.size() == 1)
             throw new IllegalArgumentException("list has only one element");
 
-        throw new UnsupportedOperationException("Exercise 4 penultimate is missing!");
+        final List<A> initialTail = Lists.tail(list);
+        final Pair<A, A> startingPair = new Pair<>(Lists.head(list), Lists.head(initialTail));
+        Pair<A, A> lastPair = Lists.foldLeft(list, startingPair, (accPair, argA) -> new Pair<>(accPair.getSecond(), argA));
+        return lastPair.getFirst();
     }
 }
