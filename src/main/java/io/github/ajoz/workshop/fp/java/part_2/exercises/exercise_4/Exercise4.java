@@ -60,7 +60,7 @@ class Exercise4 {
       - do we need the element for anything?
      */
     static <A> Integer count(final List<A> list) {
-        return Lists.foldLeft(list, 0, (a, ignore) -> a + 1);
+        return Lists.foldLeft(list, 0, (a, b) -> a + 1);
     }
 
     /*
@@ -73,7 +73,7 @@ class Exercise4 {
       - what should be the first element? (check function Lists.head)
      */
     static <A> A last(final List<A> list) {
-        throw new UnsupportedOperationException("Exercise 4 last is missing!");
+        return Lists.foldLeft(list, Lists.head(list), (head, arg) -> arg);
     }
 
     /*
