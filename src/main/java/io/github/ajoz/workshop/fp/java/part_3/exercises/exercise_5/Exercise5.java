@@ -2,6 +2,8 @@ package io.github.ajoz.workshop.fp.java.part_3.exercises.exercise_5;
 
 import java.util.NoSuchElementException;
 
+import io.github.ajoz.workshop.fp.java.tools.Function1;
+
 /*
   -- Working effectively with optionality --
 
@@ -24,6 +26,16 @@ abstract class Maybe<A> {
         public boolean isPresent() {
             return false;
         }
+
+        @Override
+        public <B> Maybe<B> map(Function1<A, B> mapper) {
+            return Maybe.nothing();
+        }
+
+        @Override
+        public <B> Maybe<B> flatMap(Function1<A, Maybe<B>> mapper) {
+            return Maybe.nothing();
+        }
     }
 
     private static final class Just<A> extends Maybe<A> {
@@ -42,6 +54,16 @@ abstract class Maybe<A> {
         public boolean isPresent() {
             return true;
         }
+
+        @Override
+        public <B> Maybe<B> map(Function1<A, B> mapper) {
+            return Maybe.just(mapper.apply(value));
+        }
+
+        @Override
+        public <B> Maybe<B> flatMap(Function1<A, Maybe<B>> mapper) {
+            return mapper.apply(value);
+        }
     }
 
     public abstract A get();
@@ -55,6 +77,9 @@ abstract class Maybe<A> {
     public static <A> Nothing<A> nothing() {
         return new Nothing<>();
     }
+
+    public abstract <B> Maybe<B> map(final Function1<A, B> mapper);
+    public abstract <B> Maybe<B> flatMap(final Function1<A, Maybe<B>> mapper);
 }
 
 /*
@@ -79,6 +104,10 @@ class DeviceAPI {
     DeviceInfo getDeviceInfo() {
         return new DeviceInfo();
     }
+
+    Maybe<DeviceInfo> getSafeDeviceInfo() {
+        return Maybe.just(new DeviceInfo());
+    }
 }
 
 @SuppressWarnings("unused")
@@ -87,6 +116,10 @@ class DeviceInfo {
     HardwareInfo getHardwareInfo() {
         return new HardwareInfo();
     }
+
+    Maybe<HardwareInfo> getSafeHardwareInfo() {
+        return Maybe.just(new HardwareInfo());
+    }
 }
 
 @SuppressWarnings("unused")
@@ -94,6 +127,10 @@ class HardwareInfo {
     // this might return a null :-(
     Architecture getArchitecture() {
         return Architecture.VLIW;
+    }
+
+    Maybe<Architecture> getSafeArchitecture() {
+        return Maybe.just(Architecture.VLIW);
     }
 }
 
@@ -142,7 +179,11 @@ public class Exercise5 {
       - does it look better or worse then the null version?
      */
     static void logging2(final DeviceAPI api) {
-        throw new UnsupportedOperationException("Execise 5 logging2 is missing!");
+        if (api.getSafeDeviceInfo().isPresent()) {
+            if (api.getSafeDeviceInfo().get().getSafeHardwareInfo().isPresent()) {
+                api.getSafeDeviceInfo().get().getSafeHardwareInfo().get();
+            }
+        }
     }
 
     /*
@@ -186,7 +227,7 @@ public class Exercise5 {
       - add `map` method, for Just it should use the passed function to calculate
         the result and wrap it inside another Just, for Nothing it should return
         Nothing
-      - add `flatMap` method, for Just it should return the result of the passed
+      - add `flatMap` method, for Just it sho uld return the result of the passed
         function, for Nothing it should return Nothing
       - add `getOrElse` method that should take a value as an argument, for Just
         it should return the value stored in Just, for Nothing it should return
@@ -203,7 +244,12 @@ public class Exercise5 {
         expression
      */
     static void logging3(final DeviceAPI api) {
-        throw new UnsupportedOperationException("Execise 5 logging3 is missing!");
+        Maybe<String> maybeMsg = api
+                .getSafeDeviceInfo()
+                .flatMap(DeviceInfo::getSafeHardwareInfo)
+                .flatMap(HardwareInfo::getSafeArchitecture)
+                .map((architecture -> ""));
+
     }
 
     public static void main(final String[] args) {

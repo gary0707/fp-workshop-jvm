@@ -1,5 +1,7 @@
 package io.github.ajoz.workshop.fp.java.part_3.exercises.exercise_3;
 
+import java.util.NoSuchElementException;
+
 import io.github.ajoz.workshop.fp.java.tools.Function1;
 import io.github.ajoz.workshop.fp.java.tools.Function2;
 
@@ -195,12 +197,12 @@ abstract class SealedList<A> {
          */
         @Override
         public A head() {
-            throw new UnsupportedOperationException("Exercise 3 SealedList.Nil.head is missing!");
+            throw new NoSuchElementException();
         }
 
         @Override
         public SealedList<A> tail() {
-            throw new UnsupportedOperationException("Exercise 3 SealedList.Nil.tail is missing!");
+            throw new NoSuchElementException();
         }
 
         /*
@@ -214,13 +216,13 @@ abstract class SealedList<A> {
          */
         @Override
         public <B> SealedList<B> map(final Function1<A, B> mapper) {
-            throw new UnsupportedOperationException("Exercise 3 SealedList.Nil.tail is missing!");
+            return new Nil<>();
         }
 
         @Override
         public <B> B foldLeft(final B initial,
                               final Function2<B, A, B> operator) {
-            throw new UnsupportedOperationException("Exercise 3 SealedList.Nil.foldLeft is missing!");
+            return initial;
         }
 
         @Override
@@ -248,12 +250,12 @@ abstract class SealedList<A> {
          */
         @Override
         public A head() {
-            throw new UnsupportedOperationException("Exercise 3 SealedList.Cons.head is missing!");
+            return head;
         }
 
         @Override
         public SealedList<A> tail() {
-            throw new UnsupportedOperationException("Exercise 3 SealedList.Cons.tail is missing!");
+            return tail;
         }
 
         /*
@@ -274,7 +276,7 @@ abstract class SealedList<A> {
          */
         @Override
         public <B> SealedList<B> map(final Function1<A, B> mapper) {
-            throw new UnsupportedOperationException("Exercise 3 SealedList.Cons.map is missing!");
+            return new Cons<>(mapper.apply(head), tail.map(mapper));
         }
 
         /*
@@ -329,7 +331,7 @@ abstract class SealedList<A> {
         @Override
         public <B> B foldLeft(final B initial,
                               final Function2<B, A, B> operator) {
-            throw new UnsupportedOperationException("Exercise 3 SealedList.Cons.foldLeft is missing!");
+            return tail.foldLeft(operator.apply(initial, head), operator);
         }
 
         @Override
@@ -369,6 +371,8 @@ public class Exercise3 {
         // List is mapped
         final SealedList<Integer> mappedList =
                 sealedList.map(x -> x + 42);
+
+        System.out.println(mappedList);
 
         // List is folded
         final String foldedList =

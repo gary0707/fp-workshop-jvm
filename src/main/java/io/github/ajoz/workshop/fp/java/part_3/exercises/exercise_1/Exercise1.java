@@ -74,17 +74,17 @@ enum EnumBoolean {
          */
         @Override
         public EnumBoolean and(final EnumBoolean other) {
-            throw new UnsupportedOperationException("Exercise 1 TRUE.and is missing!");
+            return other;
         }
 
         @Override
         public EnumBoolean or(final EnumBoolean other) {
-            throw new UnsupportedOperationException("Exercise 1 TRUE.or is missing!");
+            return this;
         }
 
         @Override
         public EnumBoolean not() {
-            throw new UnsupportedOperationException("Exercise 1 TRUE.not is missing!");
+            return FALSE;
         }
 
         /*
@@ -118,12 +118,13 @@ enum EnumBoolean {
          */
         @Override
         public EnumBoolean ifTrue(final Effect effect) {
-            throw new UnsupportedOperationException("Exercise 1 TRUE.ifTrue is missing!");
+            effect.perform();
+            return this;
         }
 
         @Override
         public EnumBoolean ifFalse(final Effect effect) {
-            throw new UnsupportedOperationException("Exercise 1 TRUE.ifFalse is missing!");
+            return this;
         }
 
         /*
@@ -143,7 +144,7 @@ enum EnumBoolean {
         @Override
         public <A> A match(final Supplier<A> ifTrue,
                            final Supplier<A> ifFalse) {
-            throw new UnsupportedOperationException("Exercise 1 TRUE.match is missing!");
+            return ifTrue.get();
         }
     },
     FALSE() {
@@ -161,33 +162,34 @@ enum EnumBoolean {
          */
         @Override
         public EnumBoolean and(final EnumBoolean other) {
-            throw new UnsupportedOperationException("Exercise 1 FALSE.and is missing!");
+            return this;
         }
 
         @Override
         public EnumBoolean or(final EnumBoolean other) {
-            throw new UnsupportedOperationException("Exercise 1 FALSE.or is missing!");
+            return other;
         }
 
         @Override
         public EnumBoolean not() {
-            throw new UnsupportedOperationException("Exercise 1 FALSE.not is missing!");
+            return TRUE;
         }
 
         @Override
         public EnumBoolean ifTrue(final Effect effect) {
-            throw new UnsupportedOperationException("Exercise 1 FALSE.ifTrue is missing!");
+            return this;
         }
 
         @Override
         public EnumBoolean ifFalse(final Effect effect) {
-            throw new UnsupportedOperationException("Exercise 1 FALSE.ifFalse is missing!");
+            effect.perform();
+            return this;
         }
 
         @Override
         public <A> A match(final Supplier<A> ifTrue,
                            final Supplier<A> ifFalse) {
-            throw new UnsupportedOperationException("Exercise 1 FALSE.match is missing!");
+            return ifFalse.get();
         }
     };
 
