@@ -1,124 +1,96 @@
 package io.github.ajoz.workshop.fp.java.part_3.solutions.exercise_3;
 
-import io.github.ajoz.workshop.fp.java.tools.Function1;
-import io.github.ajoz.workshop.fp.java.tools.Function2;
+/*
+  We can model this in two ways:
 
-import java.util.NoSuchElementException;
+  1) Id is repeated for every type of an order event:
 
-import static io.github.ajoz.workshop.fp.java.part_3.solutions.exercise_3.SealedList.cons;
-import static io.github.ajoz.workshop.fp.java.part_3.solutions.exercise_3.SealedList.nil;
-
-abstract class SealedList<A> {
-    @SuppressWarnings("WeakerAccess")
-    public static class Nil<A> extends SealedList<A> {
-        public Nil() {
-        }
-
-        @Override
-        public A head() {
-            throw new NoSuchElementException("Head of empty list!");
-        }
-
-        @Override
-        public SealedList<A> tail() {
-            throw new NoSuchElementException("Tail of empty list!");
-        }
-
-        @Override
-        public <B> SealedList<B> map(final Function1<A, B> mapper) {
-            return new Nil<>();
-        }
-
-        @Override
-        public <B> B foldLeft(final B initial,
-                              final Function2<B, A, B> operator) {
-            return initial;
-        }
-
-        @Override
-        public String toString() {
-            return "Nil";
-        }
+  type FoodOrderEvent =
+                  | OrderCreated of Id * What * Where
+                  | OrderWhatUpdated of Id * What
+                  | OrderWhereUpdated of Id * Where
+                  | OrderCanceled of Id
+ */
+@SuppressWarnings("unused")
+class FoodOrderEvent1 {
+    static class OrderCreated extends FoodOrderEvent1 {
+        Long id;
+        String what;
+        String where;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public static class Cons<A> extends SealedList<A> {
-        private final A head;
-        private final SealedList<A> tail;
-
-        public Cons(final A head, final SealedList<A> tail) {
-            this.head = head;
-            this.tail = tail;
-        }
-
-        @Override
-        public A head() {
-            return head;
-        }
-
-        @Override
-        public SealedList<A> tail() {
-            return tail;
-        }
-
-        @Override
-        public <B> SealedList<B> map(final Function1<A, B> mapper) {
-            // without foldLeft:
-            // return cons(mapper.apply(head), tail.map(mapper));
-
-            // with foldLeft
-            return foldLeft(nil(), (list, element) -> cons(mapper.apply(element), list));
-        }
-
-        @Override
-        public <B> B foldLeft(final B initial,
-                              final Function2<B, A, B> operator) {
-            return tail.foldLeft(operator.apply(initial, head), operator);
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Cons(%s, %s)", head, tail.toString());
-        }
+    static class OrderWhatUpdated extends FoodOrderEvent1 {
+        Long id;
+        String what;
     }
 
-    private SealedList() {
+    static class OrderWhereUpdated extends FoodOrderEvent1 {
+        Long id;
+        String where;
     }
 
-    public abstract A head();
-
-    public abstract SealedList<A> tail();
-
-    public abstract <B> SealedList<B> map(final Function1<A, B> mapper);
-
-    public abstract <B> B foldLeft(final B initial,
-                                   final Function2<B, A, B> operator);
-
-    public static <A> SealedList<A> cons(final A element,
-                                         final SealedList<A> list) {
-        return new Cons<>(element, list);
+    static class OrderCanceled extends FoodOrderEvent1 {
+        Long id;
     }
 
-    public static <A> SealedList<A> nil() {
-        return new Nil<>();
+    private FoodOrderEvent1() {
     }
+}
+
+/*
+  or
+
+  2) Id is a part of an event (we can guarantee that it exists always)
+  type FoodOrderEventType =
+                  | OrderCreated of What * Where
+                  | OrderWhatUpdated of What
+                  | OrderWhereUpdated of Where
+                  | OrderCanceled
+
+  type FoodOrderEvent = Id * FoodOrderEventType
+ */
+@SuppressWarnings("unused")
+class FoodOrderEventType {
+    static class OrderCreated extends FoodOrderEventType {
+        String what;
+        String where;
+    }
+
+    static class OrderWhatUpdated extends FoodOrderEventType {
+        String what;
+    }
+
+    static class OrderWhereUpdated extends FoodOrderEventType {
+        String where;
+    }
+
+    static class OrderCanceled extends FoodOrderEventType {
+    }
+
+    private FoodOrderEventType() {
+    }
+}
+
+@SuppressWarnings("unused")
+class FoodOrderEvent2 {
+    Long id;
+    FoodOrderEventType type;
 }
 
 public class Exercise3 {
     public static void main(final String[] args) {
-        // A new list is created
-        final SealedList<Integer> sealedList =
-                cons(1, cons(2, cons(3, nil())));
+        // First version:
+        final FoodOrderEvent1.OrderCreated foe1 = new FoodOrderEvent1.OrderCreated();
+        foe1.id = 42L;
+        foe1.what = "A very very very delicious food!";
+        foe1.where = "Our office right around noon";
 
-        // List is mapped
-        final SealedList<Integer> mappedList =
-                sealedList.map(x -> x + 42);
-
-        // List is folded
-        final String foldedList =
-                mappedList
-                        .tail()
-                        .foldLeft("" + mappedList.head(), (str, element) -> str + " " + element);
-        System.out.println(foldedList);
+        // Second version:
+        final FoodOrderEvent2 foe2 = new FoodOrderEvent2();
+        foe2.id = 42L;
+        final FoodOrderEventType.OrderCreated oc = new FoodOrderEventType.OrderCreated();
+        oc.what = "A super delicious and definitely not spicy food!";
+        oc.where = "Our office but please be on time this time :>";
+        foe2.type = oc;
     }
 }
